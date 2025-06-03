@@ -8,8 +8,6 @@ The code is divided into focused modules: a server entry point for seeding the d
 
 Every request is logged—showing endpoints hit and each campsite streamed—so you can trace behavior in real time. Additionally, before and after the `/campsites` stream runs (and each time `/status` is called), we sample CPU and memory usage, converting raw bytes to human-readable MB values and reporting heap usage as a percentage. Those metrics are logged to the console, offering immediate visibility into resource consumption alongside functional logging.
 
-The architecture is designed for clarity and testability. During startup, raw JSON seed data is written directly to the database. However, validation is intentionally deferred until the data is retrieved. Each record returned by getRange() is passed through the Campsite model to ensure structure and integrity before streaming.
-
 ## Architecture
 
 ```mermaid
