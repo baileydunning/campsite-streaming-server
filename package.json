@@ -1,0 +1,17 @@
+{
+  "name": "campsite-streaming-server",
+  "version": "1.0.0",
+  "description": "A Node.js server for streaming and filtering Colorado campsite data from an LMDB database",
+  "main": "src/server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node e2e/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "lmdb": "^3.4.0"
+  }
+}

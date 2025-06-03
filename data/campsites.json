@@ -1,0 +1,112 @@
+[
+  {
+    "id": "camp_001",
+    "name": "Brainard Lake Road",
+    "location": {
+      "latitude": 40.0213,
+      "longitude": -105.5856
+    },
+    "region": "Indian Peaks",
+    "elevation_ft": 10400
+  },
+  {
+    "id": "camp_002",
+    "name": "Switzerland Trail",
+    "location": {
+      "latitude": 39.9053,
+      "longitude": -105.5753
+    },
+    "region": "Sugarloaf",
+    "elevation_ft": 8700
+  },
+  {
+    "id": "camp_003",
+    "name": "Hidden Wilderness Road",
+    "location": {
+      "latitude": 39.9142,
+      "longitude": -105.4121
+    },
+    "region": "Rollinsville",
+    "elevation_ft": 9100
+  },
+  {
+    "id": "camp_004",
+    "name": "Ski Road",
+    "location": {
+      "latitude": 40.0372,
+      "longitude": -105.4605
+    },
+    "region": "Eldora",
+    "elevation_ft": 9850
+  },
+  {
+    "id": "camp_005",
+    "name": "Jones Pass Road",
+    "location": {
+      "latitude": 39.7964,
+      "longitude": -105.8578
+    },
+    "region": "Empire",
+    "elevation_ft": 10800
+  },
+  {
+    "id": "camp_006",
+    "name": "Storm Mountain Road",
+    "location": {
+      "latitude": 40.4335,
+      "longitude": -105.4812
+    },
+    "region": "Drake",
+    "elevation_ft": 8750
+  },
+  {
+    "id": "camp_007",
+    "name": "Lost Park Road",
+    "location": {
+      "latitude": 39.2871,
+      "longitude": -105.3203
+    },
+    "region": "Lost Creek",
+    "elevation_ft": 9800
+  },
+  {
+    "id": "camp_008",
+    "name": "Kebler Pass",
+    "location": {
+      "latitude": 38.8942,
+      "longitude": -107.0806
+    },
+    "region": "Crested Butte",
+    "elevation_ft": 10007
+  },
+  {
+    "id": "camp_009",
+    "name": "Cottonwood Pass",
+    "location": {
+      "latitude": 38.8208,
+      "longitude": -106.4153
+    },
+    "region": "Buena Vista",
+    "elevation_ft": 12126
+  },
+  {
+    "id": "camp_010",
+    "name": "Dominguez Canyon Road",
+    "location": {
+      "latitude": 38.8232,
+      "longitude": -108.3025
+    },
+    "region": "Dominguez-Escalante",
+    "elevation_ft": 5200
+  },
+  {
+    "id": "camp_011",
+    "name": "Rabbit Valley Road",
+    "location": {
+      "latitude": 39.1874,
+      "longitude": -109.0256
+    },
+    "region": "McInnis Canyons",
+    "elevation_ft": 4600
+  }
+]
