@@ -127,6 +127,14 @@ The server tracks its own resource usage to provide real-time performance insigh
 
 The `/status` endpoint also exposes these metrics in its JSON response, along with the server's uptime in seconds. This makes it easy to integrate the server with health checks, dashboards, or monitoring tools, and to observe resource consumption trends over time.
 
+## Performance
+
+To evaluate the server under load, I ran a simulated spike using 50 virtual users in Postman. The results are as follows:
+
+![Performance metrics](data/images/performance.png)
+
+These metrics demonstrate that, even with concurrent connections ramped up to 50 virtual users, the server sustained a steady throughput of nearly 9 req/s and maintained sub-150 ms response times for 99% of requests.
+
 ## Logging
 
 The server logs key events for transparency and debugging:
