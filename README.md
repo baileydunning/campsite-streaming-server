@@ -4,24 +4,35 @@ This project is a lightweight and modular Node.js HTTP server for streaming Colo
 
 ![Willow camping](data/images/willow.jpg)
 
-The code is divided into focused modules: a server entry point for seeding the database, routing, and startup; a controller for request handling; a service layer for filtering and business logic; and a streaming layer that pushes JSON chunks while respecting back-pressure.
+When a client sends a request to the `/campsites` endpoint, the controller first parses and validates any query parameters, such as elevation filters. It then calls the service layer, which iterates over all campsite records in the LMDB database. Each record is validated and normalized using the model before being filtered by the requested criteria. Only valid, matching campsites are yielded by the service. The controller is then responsible for starting the stream.
 
-Every request is logged—showing endpoints hit and each campsite streamed—so you can trace behavior in real time. Additionally, before and after the `/campsites` stream runs (and each time `/status` is called), we sample CPU and memory usage, converting raw bytes to human-readable MB values and reporting heap usage as a percentage. Those metrics are logged to the console, offering immediate visibility into resource consumption alongside functional logging.
+The streaming layer consumes these validated campsite objects one at a time, serializing each to JSON and writing it to the HTTP response as part of a single JSON array. This process is efficient and memory-friendly, as it never loads the entire dataset into memory. The server also monitors for client disconnects and handles backpressure by pausing and resuming streaming as needed, ensuring robust delivery even to slow clients.
+
+When a client requests the `/status` endpoint, the response is a snapshot of the server’s health and resource usage. This includes the current uptime, CPU usage, and detailed memory statistics. The service layer collects these metrics and returns them as a structured JSON object. The response is sent directly to the client, providing real-time visibility into server performance and making it easy to integrate with monitoring tools or health checks.
 
 ## Architecture
 
 ```mermaid
 flowchart TD
-    A["HTTP Client"] --> B["server.js: Handles startup, routing, and seeding"]
-    B -->|Seed Data| M["models/campsite.js: Data model & validation"]
-    M --> D["LMDB Database: Store structured records"]
-    B -->|"GET /campsites"| E["campsitesController.js: HTTP request logic"]
-    E --> F["campsitesService.js: Filtering + business logic"]
+    A["HTTP Client:<br/>Sends HTTP requests to the API"]
+    B["server.js:<br/>App entrypoint, handles startup, routing, and DB seeding"]
+    M["models/campsite.js:<br/>Validates & normalizes campsite data"]
+    D["LMDB Database:<br/>Efficient key-value store for campsite records"]
+    E["campsitesController.js:<br/>Validates query params, invokes service, manages HTTP response, starts the stream"]
+    F["campsitesService.js:<br/>Filters and validates campsites from the database, processing each campsite lazily with yield for efficient memory usage and on-demand retrieval"]
+    G["createCampsiteStream.js:<br/>Serializes and streams JSON with backpressure support"]
+    H["/status handler:<br/>Returns server health, uptime, and resource metrics"]
+
+    A --> B
+    B -->|Seed Data| M
+    M --> D
+    B -->|"GET /campsites"| E
+    E --> F
     F --> M
     F -->|getRange| D
-    E --> G["createCampsiteStream.js: Stream JSON with back-pressure"]
+    E --> G
     G -->|"JSON stream chunks"| A
-    B -->|"GET /status"| H["Return status, uptime and metrics"]
+    B -->|"GET /status"| H
     H -->|"JSON"| A
 ```
 

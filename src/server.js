@@ -14,7 +14,13 @@ const server = http.createServer(async (req, res) => {
     );
 
     if (pathname === "/campsites" && req.method === "GET") {
-      console.log(`[INFO] Received request for ${pathname}`);
+      console.log(
+        `[INFO] Received request for ${pathname}${
+          searchParams && searchParams.toString()
+            ? `?${searchParams.toString()}`
+            : ""
+        }`
+      );
 
       const beforeMetrics = await getMetrics();
 
