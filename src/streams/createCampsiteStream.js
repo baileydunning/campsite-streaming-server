@@ -16,6 +16,11 @@ export function createCampsiteStream(filtered, res, req) {
     try {
       // Iterate over the filtered campsites and send them as JSON chunks
       for (const { value } of filtered) {
+        if (!value) {
+          console.warn("[WARN] Skipping undefined or invalid campsite value");
+          continue;
+        }
+
         if (aborted) {
           console.log("[ABORTED] Stopping stream due to client disconnect");
           break;
@@ -26,7 +31,11 @@ export function createCampsiteStream(filtered, res, req) {
 
         try {
           // Serialize the campsite object as JSON
-          const chunk = prefix + JSON.stringify(value);
+          const chunk = prefix + JSON.stringify(value.toJSON());
+          if (!chunk) {
+            console.warn("[WARN] Empty chunk for campsite:", value.id);
+            continue; // Skip empty chunks
+          }
 
           // Write the chunk to the response buffer
           const ok = res.write(chunk);
@@ -45,8 +54,8 @@ export function createCampsiteStream(filtered, res, req) {
             //  - the socket’s “drain” event fires (buffer cleared), OR
             //  - the client disconnects
             await new Promise((resolve) => {
-              res.socket.once("drain", resolve);
-              req.once("close", resolve);
+              res.socket.once("drain", resolve); // Wait for drain event
+              req.once("close", resolve); // Wait for client disconnect
             });
 
             // If the client hasn’t disconnected, we can resume streaming
@@ -60,7 +69,7 @@ export function createCampsiteStream(filtered, res, req) {
           console.error(
             `[ERROR] Failed to serialize or send data for campsite: ${err.message}`
           );
-          // Optionally, you can continue the loop or break here depending on error severity
+          // If serialization fails, we log the error but continue processing other campsites
         }
       }
     } catch (err) {
@@ -69,7 +78,12 @@ export function createCampsiteStream(filtered, res, req) {
       );
     } finally {
       // Ensure that we close the JSON array and end the response cleanly
-      res.end("]");
+      if (!aborted) {
+        res.end("]");
+        console.log("[STREAM] Streaming complete.");
+      } else {
+        console.log("[STREAM] Stream aborted.");
+      }
     }
   })();
 }
