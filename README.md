@@ -8,7 +8,7 @@ When a client sends a request to the `/campsites` endpoint, the controller first
 
 The streaming layer consumes these validated campsite objects one at a time, serializing each to JSON and writing it to the HTTP response as part of a single JSON array. This process is efficient and memory-friendly, as it never loads the entire dataset into memory. The server also monitors for client disconnects and handles backpressure by pausing and resuming streaming as needed, ensuring robust delivery even to slow clients.
 
-When a client requests the `/status` endpoint, the controller immediately gathers a snapshot of the server’s health and resource usage. This includes the current uptime, CPU usage, and detailed memory statistics. The service layer collects these metrics and returns them as a structured JSON object. The response is sent directly to the client, providing real-time visibility into server performance and making it easy to integrate with monitoring tools or health checks.
+When a client requests the `/status` endpoint, the response is a snapshot of the server’s health and resource usage. This includes the current uptime, CPU usage, and detailed memory statistics. The service layer collects these metrics and returns them as a structured JSON object. The response is sent directly to the client, providing real-time visibility into server performance and making it easy to integrate with monitoring tools or health checks.
 
 ## Architecture
 
