@@ -14,16 +14,25 @@ When a client requests the `/status` endpoint, the response is a snapshot of the
 
 ```mermaid
 flowchart TD
-    A["HTTP Client"] --> B["server.js: Handles startup, routing, and seeding"]
-    B -->|Seed Data| M["models/campsite.js: Data model & validation"]
-    M --> D["LMDB Database: Store structured records"]
-    B -->|"GET /campsites"| E["campsitesController.js: HTTP request logic"]
-    E --> F["campsitesService.js: Filtering + business logic"]
+    A["HTTP Client:<br/>Sends HTTP requests to the API"]
+    B["server.js:<br/>App entrypoint, handles startup, routing, and DB seeding"]
+    M["models/campsite.js:<br/>Validates & normalizes campsite data"]
+    D["LMDB Database:<br/>Efficient key-value store for campsite records"]
+    E["campsitesController.js:<br/>Validates query params, invokes service, manages HTTP response, starts the stream"]
+    F["campsitesService.js:<br/>Filters and validates campsites from the database, processing each campsite lazily with yield for efficient memory usage and on-demand retrieval"]
+    G["createCampsiteStream.js:<br/>Serializes and streams JSON with backpressure support"]
+    H["/status handler:<br/>Returns server health, uptime, and resource metrics"]
+
+    A --> B
+    B -->|Seed Data| M
+    M --> D
+    B -->|"GET /campsites"| E
+    E --> F
     F --> M
     F -->|getRange| D
-    E --> G["createCampsiteStream.js: Stream JSON with back-pressure"]
+    E --> G
     G -->|"JSON stream chunks"| A
-    B -->|"GET /status"| H["Return status, uptime and metrics"]
+    B -->|"GET /status"| H
     H -->|"JSON"| A
 ```
 
