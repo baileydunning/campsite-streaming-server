@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "lmdb": "^3.4.0"
+    "lmdb": "^3.4.0",
+    "ws": "^8.18.2"
   }
 }
