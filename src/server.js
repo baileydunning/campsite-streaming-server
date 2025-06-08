@@ -1,13 +1,31 @@
 import http from "http";
+import { initWebSocketLogging } from "./utils/websocketLogger.js";
 import { campsitesController } from "./controllers/campsitesController.js";
 import { seedDB } from "./db/lmdb.js";
 import { getMetrics } from "./utils/getMetrics.js";
 
+// Initialize database
 await seedDB();
 console.log("[INFO] Database seeded.");
 
+// Create the HTTP server
 const server = http.createServer(async (req, res) => {
   try {
+    // Add CORS headers
+    res.setHeader("Access-Control-Allow-Origin", "*"); // Allow requests from any origin
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    ); // Allow certain methods
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type"); // Allow Content-Type header
+
+    // Handle preflight requests (OPTIONS)
+    if (req.method === "OPTIONS") {
+      res.writeHead(204); // No content response for preflight
+      res.end();
+      return;
+    }
+
     const { pathname, searchParams } = new URL(
       req.url,
       `http://${req.headers.host}`
@@ -62,4 +80,7 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
+initWebSocketLogging(server);
+
+// Start the HTTP server
 server.listen(3000, () => console.log("[INFO] Server listening on port 3000"));
