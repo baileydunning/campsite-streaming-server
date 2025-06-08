@@ -46,13 +46,16 @@ const server = http.createServer(async (req, res) => {
       campsitesController(req, res, searchParams);
 
       const afterMetrics = await getMetrics();
-
-      console.log("[METRICS] Campsites Stream CPU/Memory:", {
-        cpuBefore: beforeMetrics.cpuUsage,
-        cpuAfter: afterMetrics.cpuUsage,
-        memoryBefore: beforeMetrics.memory,
-        memoryAfter: afterMetrics.memory,
-      });
+      
+      console.log("[METRICS] Campsites Stream CPU/Memory: ");
+      console.log(
+          JSON.stringify({
+            cpuBefore: beforeMetrics.cpuUsage,
+            cpuAfter: afterMetrics.cpuUsage,
+            memoryBefore: beforeMetrics.memory,
+            memoryAfter: afterMetrics.memory,
+          })
+      );
 
       return;
     }
